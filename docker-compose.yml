@@ -1,0 +1,27 @@
+version: "3"
+services:
+
+ db:
+  image: postgres:latest
+  restart: unless-stopped
+  container_name: ins_postgres
+  env_file:
+   - .env
+
+ ins_back:
+  build: ./code
+  container_name: ins_back
+  restart: unless-stopped
+  ports:
+   - "${DJANGO_PORT}:8080"
+  env_file:
+   - .env
+  volumes:
+   - ./code:/code
+  depends_on:
+   - db
+  links:
+   - db:db
+  entrypoint: "bash /code/docker-entrypoint.sh"
+  command: "runserver 0.0.0.0:8080"
+
