@@ -1,5 +1,9 @@
 # insparty
-Spread your idea and find partners, join ambitious projects in the party 
+Inspire / In Party
+
+Inspire others by your ideas
+
+Find teams that you want to contribute to
 
 # Running locally
 Clone the repo to your machine:
