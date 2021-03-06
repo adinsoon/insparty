@@ -5,7 +5,7 @@ Inspire others by your ideas
 
 Find teams that you want to contribute to
 
-# Running locally
+## Running locally
 Clone the repo to your machine:
 ```console
 $ git clone git@github.com:adinsoon/insparty.git
