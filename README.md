@@ -7,8 +7,8 @@ Find teams that you want to contribute to
 
 # Running locally
 Clone the repo to your machine:
-```
-git clone git@github.com:adinsoon/insparty.git
+```console
+$ git clone git@github.com:adinsoon/insparty.git
 ```
 Then setup .env.template file and re-name it to .env
 ```env
@@ -29,11 +29,11 @@ DATABASE=postgres
 SECRET_KEY=!!pleasechangeme!!
 ```
 In the main directory, open your terminal and run
-```
+```console
 $ docker-compose up --build
 ```
 After building the project and passing tests, you should be ready to open the server in your browser:
-```
+```console
 ins_back    | Ran XXX tests in XX.XXXs
 ins_back    | 
 ins_back    | OK
