@@ -1,7 +1,7 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.core.validators import RegexValidator, EmailValidator, MaxValueValidator, MinValueValidator
 from django.db import models
-from django.core.utils import timezone
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
 import datetime
@@ -34,7 +34,7 @@ verify_help_text     = 'Indicates whether the user has verified his account by e
                      'ready to log-in. Un-select in order to let the user activate his account.'
 linkedin_regex_text  = "LinkedIn Profile must be entered in the format: linkedin.com/in/user or " \
                        "http(s)://linkedin.com/in/user . Limited address size."
-repo_regex_text      = "Provide url to your repository or profile"
+repo_regex_text      = "Provide correct url to your repository or profile"
 experience_help_text = "Be honest about your overall programming experience."
 
 
@@ -97,12 +97,14 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_verified  = models.BooleanField(_('Account verified'), default=False, blank=True,
                                        help_text=_(verify_help_text))
 
-    USERNAME_FIELD = 'email'
+    objects = UserManager()
+
+    USERNAME_FIELD  = 'email'
     REQUIRED_FIELDS = ['username']
 
     class Meta:
         abstract = False
-        verbose_name = _('account')
+        verbose_name        = _('account')
         verbose_name_plural = _('accounts')
         indexes = [
             models.Index(
