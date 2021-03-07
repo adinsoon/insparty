@@ -92,7 +92,8 @@ class Account(AbstractBaseUser, PermissionsMixin):
                                 # any A-z 0-9 _ - character followed or not by @
                                 # regex matches 0 or 1 http(s)://
                                 # any A-z 0-9 _ - character followed or not by @
-                                # slashes, dots for suburls and 0 or 1 .git at the end                                    # credits: https://stackoverflow.com/a/63283134
+                                # slashes, dots for suburls and 0 or 1 .git at the end
+                                # credits: https://stackoverflow.com/a/63283134
                                 # partly modified by me
                                  validators=[RegexValidator(r'^(([A-Za-z0-9]+@|http(|s)\:\/\/)|'
                                                            r'(http(|s)\:\/\/[A-Za-z0-9]+@))'
