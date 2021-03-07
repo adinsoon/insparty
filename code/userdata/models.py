@@ -17,6 +17,12 @@ class Sex(models.TextChoices):
 
 
 class Experience(models.TextChoices):
+    """
+    Used to define the level of advancement in programming by the user.
+    By selecting an option that coincides with his real experience,
+    the user (as finder) will find it easier to join projects tailored to his skills
+    or find (as founder) people with the required experience.
+    """
     NOVICE     = 'N', _('Novice (little to no experience)')
     JUNIOR     = 'J', _('Junior (base experience)')
     REGULAR    = 'R', _('Regular (significant experience)')
@@ -35,6 +41,11 @@ def validate_users_over_14_years(value: datetime.date):
         raise ValidationError(birthdate_valid_text)
 
 
+# I have isolated these auxiliary texts to:
+# > increase the clarity of the code in the attributes of the model
+# > reduce redundancy (some of them are used again in methods at the very bottom)
+# ctrl + lmb on them to find usages
+
 user_help_text        = "Enter unique username - 30 characters or fewer. Letters, digits and _ only."
 user_regex_text       = "Enter a valid username. This value may contain only letters, numbers and _ character."
 user_error_text       = "The username is already taken."
@@ -42,12 +53,12 @@ email_help_text       = "Enter unique e-mail address."
 email_error_text      = "An user with that e-mail already exists."
 email_regex_text      = "E-mail must consist of username, @ symbol, domain name, dot and domain."
 phone_regex_text      = "Phone number must be entered in the format: 123456789 or +48123456789. " \
-                     "Up to 12 digits allowed."
+                        "Up to 12 digits allowed."
 verify_help_text      = "Indicates whether the user has verified his account by e-mail and is " \
-                     "ready to log-in. Un-select in order to let the user activate his account."
+                        "ready to log-in. Un-select in order to let the user activate his account."
 linkedin_help_text    = "You can provide url to your linkedin profile."
 linkedin_regex_text   = "Linkedin Profile must be entered in the format: linkedin.com/in/user or " \
-                       "http(s)://linkedin.com/in/user . Limited address size."
+                        "http(s)://linkedin.com/in/user . Limited address size."
 repo_help_text        = "You can provide url to your repository or profile."
 repo_regex_text       = "Provide correct url to your repository or profile."
 experience_help_text  = "Be honest about your overall programming experience."
