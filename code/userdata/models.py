@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.core.validators import RegexValidator, EmailValidator, ValidationError
+from techstack.models import Technology, Specialization, Framework
 from django.utils.translation import ugettext_lazy as _
-from techstack.models import Technology, Specialization
 from django.utils import timezone
 from django.db.models import Q
 from django.db import models
@@ -117,6 +117,8 @@ class Account(AbstractBaseUser, PermissionsMixin):
     experience      = models.CharField(_('Stage of advancement'), max_length=4, choices=Experience.choices,
                                     blank=True, help_text=_(experience_help_text))
     technologies    = models.ManyToManyField(Technology, verbose_name=_('Technologies used'),
+                                          related_name='users', blank=True)
+    frameworks      = models.ManyToManyField(Framework, verbose_name=_('Frameworks'),
                                           related_name='users', blank=True)
     specializations = models.ManyToManyField(Specialization, verbose_name=_('Specializations'),
                                           related_name='users', blank=True)
