@@ -16,25 +16,27 @@ class Sex(models.TextChoices):
 
 
 class Experience(models.TextChoices):
-    NOVICE     = 'N', _('Novice, little to no experience')
-    JUNIOR     = 'J', _('Junior, base experience')
-    REGULAR    = 'R', _('Regular, significant experience')
-    SENIOR     = 'S', _('Senior, high experience')
-    EXPERT     = 'E', _('Expert, superior experience')
+    NOVICE     = 'N', _('Novice (little to no experience)')
+    JUNIOR     = 'J', _('Junior (base experience)')
+    REGULAR    = 'R', _('Regular (significant experience)')
+    SENIOR     = 'S', _('Senior (high experience)')
+    EXPERT     = 'E', _('Expert (superior experience)')
 
 
-user_help_text       = 'Enter unique username - 30 characters or fewer. Letters, digits and _ only.'
-user_regex_text      = 'Enter a valid username. This value may contain only letters, numbers and _ character.'
-user_error_text      = 'The username is already taken.'
-email_help_text      = 'Enter unique e-mail address.'
-email_error_text     = 'An user with that e-mail already exists.'
+user_help_text       = "Enter unique username - 30 characters or fewer. Letters, digits and _ only."
+user_regex_text      = "Enter a valid username. This value may contain only letters, numbers and _ character."
+user_error_text      = "The username is already taken."
+email_help_text      = "Enter unique e-mail address."
+email_error_text     = "An user with that e-mail already exists."
 phone_regex_text     = "Phone number must be entered in the format: 123456789 or +48123456789. " \
                      "Up to 12 digits allowed."
-verify_help_text     = 'Indicates whether the user has verified his account by e-mail and is ' \
-                     'ready to log-in. Un-select in order to let the user activate his account.'
-linkedin_regex_text  = "LinkedIn Profile must be entered in the format: linkedin.com/in/user or " \
+verify_help_text     = "Indicates whether the user has verified his account by e-mail and is " \
+                     "ready to log-in. Un-select in order to let the user activate his account."
+linkedin_help_text   = "You can provide url to your linkedin profile."
+linkedin_regex_text  = "Linkedin Profile must be entered in the format: linkedin.com/in/user or " \
                        "http(s)://linkedin.com/in/user . Limited address size."
-repo_regex_text      = "Provide correct url to your repository or profile"
+repo_help_text       = "You can provide url to your repository or profile."
+repo_regex_text      = "Provide correct url to your repository or profile."
 experience_help_text = "Be honest about your overall programming experience."
 
 
@@ -50,15 +52,16 @@ class Account(AbstractBaseUser, PermissionsMixin):
                                      help_text=_(email_help_text),
                                      validators=[EmailValidator],
                                      error_messages={'unique': _(email_error_text), })
-    firstname    = models.CharField(_('First name'), max_length=30)
-    lastname     = models.CharField(_('Last name'), max_length=30)
+    firstname    = models.CharField(_('First name'), max_length=30, blank=True)
+    lastname     = models.CharField(_('Last name'), max_length=30, blank=True)
 
     phone        = models.CharField(_('Phone number'), max_length=12, blank=True, null=True,
                                     # regex matches 0 or 1 '+' character and
                                     # from 9 to 12 of any digit characters
                                     validators=[RegexValidator(r'^\+?1?\d{9,12}$', _(phone_regex_text),
                                                                'invalid'), ])
-    linkedin     = models.CharField(_('LinkedIn Profile'), max_length=80, blank=True, null=True,
+    linkedin     = models.CharField(_('Linkedin Profile'), max_length=80, blank=True, null=True,
+                                    help_text=_(linkedin_help_text),
                                     # regex matches 0 or 1 http(s)://
                                     # only 1 full expression linkedin.com/
                                     # any A-z 0-9 _ - character
@@ -69,6 +72,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
                                                                r'linkedin\.com\/in\/[A-z0-9_-]+\/?$',
                                                 _(linkedin_regex_text), 'invalid'), ])
     repository   = models.CharField(_('Repository'), max_length=80, blank=True, null=True,
+                                    help_text=_(repo_help_text),
                                     # any A-z 0-9 _ - character followed or not by @
                                     # regex matches 0 or 1 http(s)://
                                     # any A-z 0-9 _ - character followed or not by @
