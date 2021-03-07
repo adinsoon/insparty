@@ -147,8 +147,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     def set_new_username(self, new_username: str):
         new_username = self.normalize_username(new_username)
         if not re.match(r'^\w+$', new_username):
-            raise ValueError(
-                user_help_text)
+            raise ValueError(user_help_text)
         if Account.objects.filter(username=new_username).exists():
             raise ValueError(user_error_text)
         else:
@@ -159,10 +158,8 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     def set_new_email(self, new_email: str):
         new_email = self.normalize_email(new_email)
-        if not re.match(r"^[A-Za-z0-9.+_-]+@[A-Za-z0-9._-]+\.[a-zA-Z]+$",
-                        new_email):
-            raise ValueError(
-                email_regex_text)
+        if not re.match(r"^[A-Za-z0-9.+_-]+@[A-Za-z0-9._-]+\.[a-zA-Z]+$", new_email):
+            raise ValueError(email_regex_text)
         if Account.objects.filter(email=new_email).exists():
             raise ValueError(email_error_text)
         else:
