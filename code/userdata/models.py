@@ -144,31 +144,27 @@ class Account(AbstractBaseUser, PermissionsMixin):
         interval = datetime.timedelta(days=7)
         return now - interval <= self.date_joined <= now
 
-    def set_new_username(self, new_username):
+    def set_new_username(self, new_username: str):
         new_username = self.normalize_username(new_username)
         if not re.match(r'^\w+$', new_username):
             raise ValueError(
-                'Enter a valid username. This value may contain only '
-                'letters, numbers and _ character.')
+                user_help_text)
         if Account.objects.filter(username=new_username).exists():
-            raise ValueError('This username is already taken.')
+            raise ValueError(user_error_text)
         else:
             if new_username != self.username:
                 self.username = new_username
             else:
                 raise ValueError("New username cannot be old username")
 
-    def set_new_email(self, new_email):
+    def set_new_email(self, new_email: str):
         new_email = self.normalize_email(new_email)
         if not re.match(r"^[A-Za-z0-9.+_-]+@[A-Za-z0-9._-]+\.[a-zA-Z]+$",
                         new_email):
             raise ValueError(
-                'Enter a valid e-mail. This value may contain only letters, '
-                'numbers and '
-                '- _ . characters. This value must contain @ character and '
-                'e-mail domain. ')
+                email_regex_text)
         if Account.objects.filter(email=new_email).exists():
-            raise ValueError('This e-mail is already taken.')
+            raise ValueError(email_error_text)
         else:
             if new_email != self.email:
                 self.email = new_email
@@ -176,5 +172,5 @@ class Account(AbstractBaseUser, PermissionsMixin):
                 raise ValueError("New email cannot be old email")
 
     @staticmethod
-    def normalize_email(new_email):
+    def normalize_email(new_email: str):
         return new_email.lower()
