@@ -132,9 +132,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
             models.Index(
                 name="account_is_verified",
                 fields=["is_verified"],
-                condition=Q(is_verified=True),
-            ),
-        ]
+                condition=Q(is_verified=True), ), ]
 
     def __str__(self):
         return f'{self.username} account'
