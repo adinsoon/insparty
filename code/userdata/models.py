@@ -83,7 +83,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
                                                                    _(email_regex_text))],
                                         error_messages={'unique': _(email_error_text), })
     firstname       = models.CharField(_('First name'), max_length=30, blank=True)
-    lastname        = models.CharField(_('Last name'), max_length=30, blank=True)
+    lastname        = models.CharField(_('Last name'),  max_length=30, blank=True)
 
     phone           = models.CharField(_('Phone number'), max_length=12, blank=True, null=True,
                                     # regex matches 0 or 1 '+' character and
@@ -127,7 +127,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
                                     validators=[validate_users_over_14_years])
     description     = models.TextField(_('Description of user'), max_length=200, blank=True)
 
-    is_staff        = models.BooleanField(_('Staff status'), default=False)
+    is_staff        = models.BooleanField(_('Staff status'),  default=False)
     is_active       = models.BooleanField(_('Active status'), default=True)
 
     date_joined     = models.DateTimeField(_('Account created'), default=timezone.now, editable=False)
