@@ -1,4 +1,4 @@
-from .models import Technology, Specialization
+from .models import Technology, Framework, Specialization
 from django.db.utils import IntegrityError
 from django.test import TestCase
 from faker import Factory
@@ -11,6 +11,13 @@ def setup_techs(name: str):
     Create technology with given name.
     """
     return Technology.objects.create(name=name)
+
+
+def setup_frameworks(name:str):
+    """
+    Create framework with given name.
+    """
+    return Framework.objects.create(name=name)
 
 
 def setup_specs(name: str):
@@ -28,6 +35,17 @@ class TechsTests(TestCase):
         """
         name = faker.word()
         tech = setup_techs(name=name)
+        self.assertRaises(IntegrityError, setup_techs, name)
+
+
+class FrameworksTests(TestCase):
+
+    def test_create_existing_framework(self):
+        """
+        Check if it is possible to create framework with existing name.
+        """
+        name = faker.word()
+        framework = setup_techs(name=name)
         self.assertRaises(IntegrityError, setup_techs, name)
 
 
