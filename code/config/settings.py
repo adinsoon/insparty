@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # userdata
     'userdata',
+    # technology
+    'techstack',
 ]
 
 MIDDLEWARE = [
