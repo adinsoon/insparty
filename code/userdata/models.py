@@ -62,9 +62,9 @@ linkedin_regex_text   = "Linkedin Profile must be entered in the format: linkedi
 repo_help_text        = "You can provide url to your repository or profile."
 repo_regex_text       = "Provide correct url to your repository or profile."
 experience_help_text  = "Be honest about your overall programming experience."
-technology_help_text = "Choose technologies you feel good in."
-framework_help_text  = "Choose frameworks you use."
-specialize_help_text = "Choose specializations that match your role."
+technology_help_text  = "Choose technologies you feel good in."
+framework_help_text   = "Choose frameworks you use."
+specialize_help_text  = "Choose specializations that match your role."
 birthdate_help_text   = "You need to meet the age requirements to have an account."
 birthdate_valid_text  = "You must be at least 14 years old in order to have an account. "
 
@@ -117,14 +117,12 @@ class Account(AbstractBaseUser, PermissionsMixin):
                                                            _(repo_regex_text), 'invalid'), ])
     experience      = models.CharField(_('Stage of advancement'), max_length=4, choices=Experience.choices,
                                     blank=True, help_text=_(experience_help_text))
-    technologies = models.ManyToManyField(Technology, blank=True,
-                                          related_name=_('accounts'),
+    technologies    = models.ManyToManyField(Technology, blank=True, related_name=_('accounts'),
                                           help_text=_(technology_help_text))
-    frameworks = models.ManyToManyField(Framework, blank=True, related_name=_('accounts'),
-                                        help_text=_(framework_help_text))
-    specializations = models.ManyToManyField(Specialization, blank=True,
-                                             related_name=_('accounts'),
-                                             help_text=_(specialize_help_text))
+    frameworks      = models.ManyToManyField(Framework, blank=True,  related_name=_('accounts'),
+                                          help_text=_(framework_help_text))
+    specializations = models.ManyToManyField(Specialization, blank=True, related_name=_('accounts'),
+                                          help_text=_(specialize_help_text))
     sex             = models.CharField(_('Sex'), max_length=4, choices=Sex.choices, blank=True)
     birthdate       = models.DateField(_('Date of birth'), blank=True, null=True,
                                     help_text=_(birthdate_help_text),
