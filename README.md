@@ -69,9 +69,9 @@ So, instead of having to run each component individually, worry about their up-t
 - #### Why did you decide on a custom user model?
 For example, I was able to adjust the user model to my own preferences, including logging in via e-mail.  
 Using your own user model makes it much easier to extend in the future.  
-It is important to set **AUTH_USER_MODEL** in settings.py to the new custom user model
+It is important to set **AUTH_USER_MODEL** in settings.py to the new custom user model.
 - #### Why there is set_new_username and set_new_email methods in your user model?  
-Based on the concept of custom user model, email and username for each user must be unique. These methods allow you to validate field changes for username and email
+Based on the concept of custom user model, email and username for each user must be unique. These methods allow you to validate field changes for username and email.
 - #### Why are you using Faker and Factories?   
 Faker and Factories enable comprehensive testing without the need to create static names, passwords, or strings. It's very convenient.
 - #### Why is the programmic experience a choice field?
@@ -83,6 +83,8 @@ I wanted to put some common data formats into a number of other models and it wa
 Meanwhile, I expanded the choice of available "properties" of idea or user, so I was able to conveniently extend them using inheritance.
 - #### Why SlugField in the idea?   
 SlugField is a more human-readable form of identifying idea that works well as a part of url (way better than yoursite.xyz/idea/120). Going a little ahead with thoughts it's also better processed by SEO.
+- #### Should you change title_slug value every time title is changed?
+This is probably not a good idea. Taking into account the url mechanism for a given idea, slug is its integral part. If it changes every time, potential visitors will have trouble finding the idea next time, let alone adding it to their bookmarks! I thought about implementing a slugfield change, but these issues made me dismiss it. So, think twice before creating a title for an idea! Or create a new one.
 - #### Why is the programmic experience a multichoice field in idea model unlike the user?  
 The user is responsible only for himself, while the idea may consist of a group of various people, whose experience may differ as well. Hence the founder can choose what range of experience he expects in people who would like to join his idea.
 - #### Why description is required for Idea model?  
