@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'idea',
 
     # 3rd apps
+    'django_extensions',
     'multiselectfield',
 ]
 
