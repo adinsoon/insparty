@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.core.validators import RegexValidator, EmailValidator, ValidationError
+from techstack.models import Technology, Framework, Specialization
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.db.models import Q
@@ -50,33 +51,36 @@ linkedin_regex_text  = "Linkedin Profile must be entered in the format: linkedin
 repo_help_text       = "You can provide url to your repository or profile."
 repo_regex_text      = "Provide correct url to your repository or profile."
 experience_help_text = "Be honest about your overall programming experience."
+technology_help_text = "Choose technologies you feel good in."
+framework_help_text  = "Choose frameworks you use."
+specialize_help_text = "Choose specializations that match your role."
 birthdate_help_text  = "You need to meet the age requirements to have an account."
 birthdate_valid_text = "You must be at least 14 years old in order to have an account. "
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
-    username     = models.CharField(_('Username'), max_length=30, unique=True,
-                                    help_text=_(user_help_text),
-                                    # regex matches 1 or more of any word character
-                                    # (alnum + underscore)
-                                    validators=[RegexValidator(r'^\w+$', _(user_regex_text),
-                                                               'invalid'), ],
-                                    error_messages={'unique': _(user_error_text), })
-    email        = models.EmailField(_('E-mail address'), unique=True,
-                                     help_text=_(email_help_text),
-                                     validators=[EmailValidator(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+'
-                                                                r'\.[a-zA-Z0-9-.]+$)',
-                                                                _(email_regex_text))],
-                                     error_messages={'unique': _(email_error_text), })
-    firstname    = models.CharField(_('First name'), max_length=30, blank=True)
-    lastname     = models.CharField(_('Last name'), max_length=30, blank=True)
+    username        = models.CharField(_('Username'), max_length=30, unique=True,
+                                       help_text=_(user_help_text),
+                                       # regex matches 1 or more of any word character
+                                       # (alnum + underscore)
+                                       validators=[RegexValidator(r'^\w+$', _(user_regex_text),
+                                                                  'invalid'), ],
+                                       error_messages={'unique': _(user_error_text), })
+    email           = models.EmailField(_('E-mail address'), unique=True,
+                                       help_text=_(email_help_text),
+                                       validators=[EmailValidator(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+'
+                                                                  r'\.[a-zA-Z0-9-.]+$)',
+                                                                 _(email_regex_text))],
+                                       error_messages={'unique': _(email_error_text), })
+    firstname       = models.CharField(_('First name'), max_length=30, blank=True)
+    lastname        = models.CharField(_('Last name'), max_length=30, blank=True)
 
-    phone        = models.CharField(_('Phone number'), max_length=12, blank=True, null=True,
-                                    # regex matches 0 or 1 '+' character and
-                                    # from 9 to 12 of any digit characters
-                                    validators=[RegexValidator(r'^\+?1?\d{9,12}$', _(phone_regex_text),
+    phone           = models.CharField(_('Phone number'), max_length=12, blank=True, null=True,
+                                       # regex matches 0 or 1 '+' character and
+                                       # from 9 to 12 of any digit characters
+                                       validators=[RegexValidator(r'^\+?1?\d{9,12}$', _(phone_regex_text),
                                                                'invalid'), ])
-    linkedin     = models.URLField(_('Linkedin Profile'), max_length=80, blank=True, null=True,
+    linkedin        = models.URLField(_('Linkedin Profile'), max_length=80, blank=True, null=True,
                                 help_text=_(linkedin_help_text),
                                 # regex matches 0 or 1 http(s)://
                                 # only 1 full expression linkedin.com/
@@ -87,7 +91,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
                                 validators=[RegexValidator(r'^(\S*)(http(s)?:\/\/([\w]+\.)?)?'
                                                            r'linkedin\.com\/in\/[A-z0-9_-]+\/?$',
                                             _(linkedin_regex_text), 'invalid'), ])
-    repository   = models.URLField(_('Repository'), max_length=80, blank=True, null=True,
+    repository      = models.URLField(_('Repository'), max_length=80, blank=True, null=True,
                                 help_text=_(repo_help_text),
                                 # any A-z 0-9 _ - character followed or not by @
                                 # regex matches 0 or 1 http(s)://
@@ -100,23 +104,28 @@ class Account(AbstractBaseUser, PermissionsMixin):
                                                            r'([A-Za-z0-9.]+(:\d+)?)(?::|\/)'
                                                            r'([\d\/\w.-]+?)((\.git)?){1}$',
                                                            _(repo_regex_text), 'invalid'), ])
-    experience   = models.CharField(_('Stage of advancement'), max_length=4, choices=Experience.choices,
+    experience      = models.CharField(_('Stage of advancement'), max_length=4, choices=Experience.choices,
                                     blank=True, help_text=_(experience_help_text))
-    # technologies = models.
+    technologies    = models.ManyToManyField(Technology, blank=True, related_name=_('accounts'),
+                                            help_text=_(technology_help_text))
+    frameworks      = models.ManyToManyField(Framework, blank=True,  related_name=_('accounts'),
+                                            help_text=_(framework_help_text))
+    specializations = models.ManyToManyField(Specialization, blank=True, related_name=_('accounts'),
+                                            help_text=_(specialize_help_text))
     # rating       = models.
 
-    sex          = models.CharField(_('Sex'), max_length=4, choices=Sex.choices, blank=True)
-    birthdate    = models.DateField(_('Date of birth'), blank=True, null=True,
-                                    help_text=_(birthdate_help_text),
-                                    validators=[validate_users_over_14_years])
-    description  = models.TextField(_('Description of user'), max_length=200, blank=True)
+    sex             = models.CharField(_('Sex'), max_length=4, choices=Sex.choices, blank=True)
+    birthdate       = models.DateField(_('Date of birth'), blank=True, null=True,
+                                       help_text=_(birthdate_help_text),
+                                       validators=[validate_users_over_14_years])
+    description     = models.TextField(_('Description of user'), max_length=200, blank=True)
 
-    is_staff     = models.BooleanField(_('Staff status'), default=False)
-    is_active    = models.BooleanField(_('Active status'), default=True)
+    is_staff        = models.BooleanField(_('Staff status'), default=False)
+    is_active       = models.BooleanField(_('Active status'), default=True)
 
-    date_joined  = models.DateTimeField(_('Account created'), default=timezone.now, editable=False)
-    last_seen    = models.DateTimeField(_('Last seen'), auto_now=True, db_index=True)
-    is_verified  = models.BooleanField(_('Account verified'), default=False, blank=True,
+    date_joined     = models.DateTimeField(_('Account created'), default=timezone.now, editable=False)
+    last_seen       = models.DateTimeField(_('Last seen'), auto_now=True, db_index=True)
+    is_verified     = models.BooleanField(_('Account verified'), default=False, blank=True,
                                        help_text=_(verify_help_text))
 
     objects = UserManager()
