@@ -47,17 +47,17 @@ class Idea(models.Model):
     advancement     = MultiSelectField(_('Advancement of idea'), choices=Experience.choices, max_length=4,
                                     blank=True, help_text=_(advancement_help_text))
     repository      = models.URLField(_('Repository'), max_length=80, blank=True, null=True,
-                                 help_text=_(repo_help_text),
-                                 # any A-z 0-9 _ - character followed or not by @
-                                 # regex matches 0 or 1 http(s)://
-                                 # any A-z 0-9 _ - character followed or not by @
-                                 # slashes, dots for suburls and 0 or 1 .git at the end
-                                 # credits: https://stackoverflow.com/a/63283134
-                                 # partly modified by me, also used in userdata.models
-                                 validators=[RegexValidator(r'^(([A-Za-z0-9]+@|http(|s)\:\/\/)|'
-                                                          r'(http(|s)\:\/\/[A-Za-z0-9]+@))'
-                                                          r'([A-Za-z0-9.]+(:\d+)?)(?::|\/)'
-                                                          r'([\d\/\w.-]+?)((\.git)?){1}$',
+                                  help_text=_(repo_help_text),
+                                  # any A-z 0-9 _ - character followed or not by @
+                                  # regex matches 0 or 1 http(s)://
+                                  # any A-z 0-9 _ - character followed or not by @
+                                  # slashes, dots for suburls and 0 or 1 .git at the end
+                                  # credits: https://stackoverflow.com/a/63283134
+                                  # partly modified by me, also used in userdata.models
+                                  validators=[RegexValidator(r'^(([A-Za-z0-9]+@|http(|s)\:\/\/)|'
+                                                           r'(http(|s)\:\/\/[A-Za-z0-9]+@))'
+                                                           r'([A-Za-z0-9.]+(:\d+)?)(?::|\/)'
+                                                           r'([\d\/\w.-]+?)((\.git)?){1}$',
                                                            _(repo_regex_text), 'invalid'), ])
     description    = models.TextField(_('Idea description'), max_length=2000, blank=False,
                                       help_text=_(description_help_text))
