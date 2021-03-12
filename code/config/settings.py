@@ -44,6 +44,11 @@ INSTALLED_APPS = [
     'userdata',
     # technology
     'techstack',
+    # idea
+    'idea',
+
+    # 3rd apps
+    'multiselectfield',
 ]
 
 MIDDLEWARE = [
