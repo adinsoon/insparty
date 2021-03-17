@@ -44,6 +44,12 @@ INSTALLED_APPS = [
     'userdata',
     # technology
     'techstack',
+    # idea
+    'idea',
+
+    # 3rd apps
+    'django_extensions',
+    'multiselectfield',
 ]
 
 MIDDLEWARE = [

@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.core.validators import RegexValidator, EmailValidator, ValidationError
-from techstack.models import Technology, Framework,  Specialization
+from techstack.models import Technology, Framework,  Specialization, Experience
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from django.db.models import Q
@@ -14,20 +14,6 @@ class Sex(models.TextChoices):
     FEMALE     = 'F', _('Female')
     OTHER      = 'O', _('Other')
     PREFER_NOT = 'P', _('Prefer Not To Say')
-
-
-class Experience(models.TextChoices):
-    """
-    Used to define the level of advancement in programming by the user.
-    By selecting an option that coincides with his real experience,
-    the user (as finder) will find it easier to join projects tailored to his skills
-    or find (as founder) people with the required experience.
-    """
-    NOVICE     = 'N', _('Novice (little to no experience)')
-    JUNIOR     = 'J', _('Junior (base experience)')
-    REGULAR    = 'R', _('Regular (significant experience)')
-    SENIOR     = 'S', _('Senior (high experience)')
-    EXPERT     = 'E', _('Expert (superior experience)')
 
 
 def validate_users_over_14_years(value: datetime.date):
@@ -109,7 +95,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
                                  # any A-z 0-9 _ - character followed or not by @
                                  # slashes, dots for suburls and 0 or 1 .git at the end
                                  # credits: https://stackoverflow.com/a/63283134
-                                 # partly modified by me
+                                 # partly modified by me, also used in idea.models
                                  validators=[RegexValidator(r'^(([A-Za-z0-9]+@|http(|s)\:\/\/)|'
                                                           r'(http(|s)\:\/\/[A-Za-z0-9]+@))'
                                                           r'([A-Za-z0-9.]+(:\d+)?)(?::|\/)'
@@ -117,12 +103,12 @@ class Account(AbstractBaseUser, PermissionsMixin):
                                                            _(repo_regex_text), 'invalid'), ])
     experience      = models.CharField(_('Stage of advancement'), max_length=4, choices=Experience.choices,
                                     blank=True, help_text=_(experience_help_text))
-    technologies    = models.ManyToManyField(Technology, blank=True, related_name=_('accounts'),
-                                          help_text=_(technology_help_text))
-    frameworks      = models.ManyToManyField(Framework, blank=True,  related_name=_('accounts'),
-                                          help_text=_(framework_help_text))
-    specializations = models.ManyToManyField(Specialization, blank=True, related_name=_('accounts'),
-                                          help_text=_(specialize_help_text))
+    technologies    = models.ManyToManyField(Technology, verbose_name=_('Technologies'), blank=True,
+                                          help_text=_(technology_help_text), related_name=_('accounts'))
+    frameworks      = models.ManyToManyField(Framework,  verbose_name=_('Frameworks'),   blank=True,
+                                          help_text=_(framework_help_text), related_name=_('accounts'))
+    specializations = models.ManyToManyField(Specialization, verbose_name=_('Specializations'), blank=True,
+                                          help_text=_(specialize_help_text),  related_name=_('accounts'))
     sex             = models.CharField(_('Sex'), max_length=4, choices=Sex.choices, blank=True)
     birthdate       = models.DateField(_('Date of birth'), blank=True, null=True,
                                     help_text=_(birthdate_help_text),
@@ -153,7 +139,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
                 condition=Q(is_verified=True), ), ]
 
     def __str__(self):
-        return f'{self.username} account'
+        return f'{self.username}'
 
     def has_recently_joined(self):
         now = timezone.now()
