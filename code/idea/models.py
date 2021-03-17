@@ -29,6 +29,7 @@ repo_help_text        = "You can provide url to repository of your idea if exist
 repo_regex_text       = "Provide correct url to repository of your idea."
 description_help_text = "Describe your idea, its genesis, provide information that " \
                         "will help others understand it."
+team_size_help_text   = "Determine the size of the team."
 
 
 class Idea(models.Model):
@@ -73,6 +74,8 @@ class Idea(models.Model):
     date_created   = models.DateTimeField(_('Date created'), default=timezone.now, editable=False)
     status         = models.CharField(_('Idea status'), max_length=4, choices=Status.choices,
                                       default=Status.OPEN)
+    team_size      = models.PositiveSmallIntegerField(_('Idea team size'), blank=False,
+                                                      help_text=team_size_help_text)
 
     class Meta:
         verbose_name        = _('idea')
