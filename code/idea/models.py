@@ -29,7 +29,7 @@ repo_help_text        = "You can provide url to repository of your idea if exist
 repo_regex_text       = "Provide correct url to repository of your idea."
 description_help_text = "Describe your idea, its genesis, provide information that " \
                         "will help others understand it."
-team_size_help_text   = "Determine the size of the team."
+team_size_help_text   = "Determine expected size of the team."
 
 
 class Idea(models.Model):
