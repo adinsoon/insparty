@@ -10,6 +10,15 @@ from django.db import models
 import datetime
 
 
+class Status(models.TextChoices):
+    """
+    Used to define the status of idea.
+    """
+    OPEN          = 'O', _('Recruitment open')
+    SUSPENDED     = 'S', _('Recruitment suspended')
+    CLOSED        = 'C', _('Recruitment closed')
+
+
 title_help_text       = "Enter a title that best reflects your idea"
 finders_help_text     = "Choose the partners you would like to join the idea"
 technology_help_text  = "Choose technologies you would like to see in your idea."
@@ -62,6 +71,8 @@ class Idea(models.Model):
     description    = models.TextField(_('Idea description'), max_length=2000, blank=False,
                                       help_text=_(description_help_text))
     date_created   = models.DateTimeField(_('Date created'), default=timezone.now, editable=False)
+    status         = models.CharField(_('Idea status'), max_length=4, choices=Status.choices,
+                                      default=Status.OPEN)
 
     class Meta:
         verbose_name        = _('idea')
