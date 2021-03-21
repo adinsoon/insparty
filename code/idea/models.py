@@ -1,11 +1,12 @@
 from techstack.models import Technology, Framework,  Specialization, Experience
+from django.core.validators import RegexValidator, ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django_extensions.db.fields import AutoSlugField
-from django.core.validators import RegexValidator
 from multiselectfield import MultiSelectField
-from django.conf import settings
-from django.utils import timezone
+from roles.models import Founder, Finder
 from .utils import custom_slugify
+from django.utils import timezone
+from django.conf import settings
 from django.db import models
 import datetime
 
@@ -32,19 +33,27 @@ description_help_text = "Describe your idea, its genesis, provide information th
 team_size_help_text   = "Determine expected size of the team."
 
 
+def validate_founder(pk):
+    limit = settings.FOUNDER_IDEAS_LIMIT
+    error_text = f"You can have up to {limit} open ideas as a founder. " \
+                 f"Close any of the created ideas or suspend them and try again."
+    if Founder.objects.get(pk=pk).ideas.filter(status=Status.OPEN).count() > limit:
+        raise ValidationError(_(error_text))
+    else:
+        return
+
+
 class Idea(models.Model):
     title           = models.CharField(_('Idea title'), max_length=200,
                                   help_text=_(title_help_text))
     title_slug      = AutoSlugField(populate_from='title', db_index=True, unique=True,
                                slugify_function=custom_slugify)
-    # change it later
-    founder         = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('Idea founder'),
-                                   on_delete=models.CASCADE, related_name=_('founder'))
-    # change it later
-    finders         = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name=_('Idea finders'),
-                                        related_name=_('finders'), help_text=_(finders_help_text),
+    founder         = models.ForeignKey(Founder, verbose_name=_('Idea founder'),
+                                   on_delete=models.CASCADE, related_name=_('ideas'),
+                                   validators=[validate_founder])
+    finders         = models.ManyToManyField(Finder, verbose_name=_('Idea finders'),
+                                        related_name=_('ideas'), help_text=_(finders_help_text),
                                         blank=True)
-
     technologies    = models.ManyToManyField(Technology, verbose_name=_('Technologies'),
                                         related_name=_('ideas'), help_text=_(technology_help_text),
                                         blank=True)
@@ -54,7 +63,7 @@ class Idea(models.Model):
     specializations = models.ManyToManyField(Specialization, verbose_name=_('Specializations'),
                                         related_name=_('ideas'), help_text=_(specialize_help_text),
                                         blank=True)
-    advancement     = MultiSelectField(_('Advancement of idea'), choices=Experience.choices, max_length=4,
+    advancement     = MultiSelectField(_('Advancement of idea'), choices=Experience.choices, max_length=9,
                                     blank=True, help_text=_(advancement_help_text))
     repository      = models.URLField(_('Repository'), max_length=80, blank=True, null=True,
                                   help_text=_(repo_help_text),
@@ -75,7 +84,7 @@ class Idea(models.Model):
     status         = models.CharField(_('Idea status'), max_length=4, choices=Status.choices,
                                       default=Status.OPEN)
     team_size      = models.PositiveSmallIntegerField(_('Idea team size'), blank=False,
-                                                      help_text=team_size_help_text)
+                                                      help_text=team_size_help_text, default=1)
 
     class Meta:
         verbose_name        = _('idea')

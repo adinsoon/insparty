@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'techstack',
     # idea
     'idea',
+    # roles
+    'roles',
 
     # 3rd apps
     'django_extensions',
@@ -137,3 +139,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'userdata.Account'
+
+FOUNDER_IDEAS_LIMIT = 2
+FINDER_IDEAS_LIMIT  = 3
