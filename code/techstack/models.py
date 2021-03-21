@@ -51,3 +51,17 @@ class Specialization(Tech):
         abstract = False
         verbose_name        = _('specialization')
         verbose_name_plural = _('specializations')
+
+
+class Experience(models.TextChoices):
+    """
+    Used to define the level of advancement in programming by the user or idea.
+    By selecting an option that coincides with his real experience,
+    the user (as finder) will find it easier to join projects tailored to his skills
+    or find (as founder) people with the required experience.
+    """
+    NOVICE     = 'N', _('Novice (little to no experience)')
+    JUNIOR     = 'J', _('Junior (base experience)')
+    REGULAR    = 'R', _('Regular (significant experience)')
+    SENIOR     = 'S', _('Senior (high experience)')
+    EXPERT     = 'E', _('Expert (superior experience)')
