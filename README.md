@@ -16,8 +16,11 @@ Then setup .env.template file and re-name it to .env
 DEBUG=1
 
 SERVER_IP=domain.tld
-DEV_IP=X.X.X.X
-DJANGO_PORT=xxxx
+DEV_IP=0.0.0.0
+DJANGO_PORT=8080
+DJANGO_SETTINGS_MODULE=config.settings
+
+SECRET_KEY=!!pleasechangeme!!
 
 POSTGRES_NAME=postgres
 POSTGRES_USER=postgres
@@ -26,7 +29,12 @@ POSTGRES_SERVICE=postgres
 POSTGRES_PORT=5432
 DATABASE=postgres
 
-SECRET_KEY=!!pleasechangeme!!
+EMAIL_BACKEND=some-backend
+EMAIL_HOST=some-host
+EMAIL_HOST_USER=yourmail@example.com
+EMAIL_HOST_PASSWORD=!!pleasechangeme!!
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
 ```
 In the main directory, open your terminal and run container
 ```console
