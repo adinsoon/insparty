@@ -35,7 +35,7 @@ services:
  celery:
   build: .
   container_name: ins_celery
-  command: "celery -A config worker -l debug"
+  command: "celery -A config worker -l debug -c 4"
   env_file:
    - .env
   depends_on:

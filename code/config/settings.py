@@ -54,6 +54,9 @@ INSTALLED_APPS = [
     'multiselectfield',
     'celery',
     'django_celery_beat',
+
+    # utils and experiments
+    'utils',
 ]
 
 MIDDLEWARE = [
@@ -85,6 +88,14 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = os.environ.get("EMAIL_PORT")
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
+DEFAULT_FROM_EMAIL = "Contact Insparty"
 
 
 # Database
