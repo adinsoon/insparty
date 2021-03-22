@@ -2,6 +2,8 @@
 
 #credits: KNR Web
 
+# entrypoint: "entrypoint.sh" overrides ENTRYPOINT ["test.sh"] from Dockerfile
+
 ownership() {
     # Fixes ownership of output files
     # source: https://github.com/BD2KGenomics/cgl-docker-lib/blob/master/mutect/runtime/wrapper.sh#L5
@@ -11,6 +13,7 @@ ownership() {
 
 echo "Installing missing packets"
 pip install -r ./requirements.txt
+# wait for postgres to up
 echo "Waiting for postgres"
 chmod +x wait-for-it.sh
 ./wait-for-it.sh -t 80 "$POSTGRES_SERVICE":5432 || exit 1
@@ -18,7 +21,8 @@ chmod +x wait-for-it.sh
 echo '--------------------------'
 echo 'Database migration'
 echo '--------------------------'
-python manage.py makemigrations || exit 1
+# makemigrations should not be automated 
+# python manage.py makemigrations || exit 1
 python manage.py migrate || exit 1
 
 
@@ -36,6 +40,7 @@ ownership
 echo '--------------------------'
 echo 'Run command'
 # shellcheck disable=SC2068
+# @ is passed from command: from ins_back from docker-compose.yml
 echo $@
 echo '--------------------------'
 # shellcheck disable=SC2068

@@ -1,8 +1,14 @@
+# Docker Compose allows to run more than one container in a Docker application
+# Compose allows to define several services that will make up app and run them all together
+
+# defines the version of Compose used
 version: '3'
 
+# to define the services to be run in image in separate containers when project is run
 services:
-
+ # sets up the db service
  db:
+  # as a Postgres database and pulls latest image that already exists in Docker Hub
   image: postgres:latest
   restart: unless-stopped
   container_name: ins_postgres
@@ -10,31 +16,58 @@ services:
    - .env
    
  ins_back:
+  # build: . tells Compose to build the image from the current directory
   build: .
   container_name: ins_back
+  # no	- Do not automatically restart the container. (the default)
+
+  # on-failure	- Restart the container if it exits due to an error, which manifests as a non-zero exit code.
+  
+  # always - Always restart the container if it stops. If it is manually stopped, it is restarted only when 
+  # Docker daemon restarts or the container itself is manually restarted. (See the second bullet listed in 
+  # restart policy details)
+  
+  # unless-stopped - Similar to always, except that when the container is stopped (manually or otherwise), it 
+  # is not restarted even after Docker daemon restarts.
   restart: unless-stopped
   ports:
    - "${DJANGO_PORT}:8080"
   env_file:
    - .env
+  # volumes tells Compose where in the container to store the data
+  # volume also lets data persist beyond the lifecycle of a specific container
   volumes:
    - ./code:/code
+  # declares that back service depends on db service, so Compose will get the db service up 
+  # and running before it tries to run the web service
   depends_on:
    - db
    - redis
-  links:
-   - db:db
+  # links is no longer needed because its main purpose, making container reachable by another by adding 
+  # environment variable, is included implicitly with network. When containers are placed in the same network, 
+  # they are reachable by each other using their container name and other alias as host. 
+  #links:
+  # - db:db
+  
+  # to define an image with a specific executable.
   entrypoint: "bash /code/docker-entrypoint.sh"
+  # defines default commands and/or parameters for image
   command: "runserver 0.0.0.0:8080"
  
+ # Redis is used to store messages produced by the application code describing the work to be done in the Celery task queue. 
+ # Redis also serves as storage of results coming off the celery queues which are then retrieved by consumers of the queue
  redis:
   image: redis:latest
   container_name: ins_redis
   restart: unless-stopped
    
+ # Celery is an open source asynchronous task queue or job queue which is based on distributed message passing
  celery:
   build: .
   container_name: ins_celery
+  # run celery -A(app) [app_name] worker -l (logging info) -c(concurrency)
+  # concurrency - like a multiprocessing
+  # -c - number of child processes processing the queue, the default is the number of CPUs available on system
   command: "celery -A config worker -l debug -c 4"
   env_file:
    - .env
@@ -47,10 +80,13 @@ services:
  celery-beat:
   build: .
   container_name: ins_beat
+  # celery beat is a scheduler; It kicks off tasks at regular intervals, that are then executed by 
+  # available worker nodes in the cluster
   command: "celery -A config worker --beat -l debug"
   depends_on:
     - db
     - redis
-    - celery
+    # redundancy
+    # - celery
   volumes:
     - ./code:/code

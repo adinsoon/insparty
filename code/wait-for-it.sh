@@ -4,6 +4,11 @@
 #source: https://github.com/vishnubob/wait-for-it/blob/master/wait-for-it.sh
 #credits: KNR Web
 
+# script needs to be built into the image
+# There's a fairly common pattern of using an entrypoint script to do some initial setup, and then use exec "$@" 
+# to run the container's command as the main process
+# e.g., use the wait-for-it.sh script to wait for the backend to be up, then run main command happens to be
+
 cmdname=$(basename "$0")
 
 echoerr() { if [[ $QUIET -ne 1 ]]; then echo "$@" 1>&2; fi }
