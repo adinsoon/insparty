@@ -22,7 +22,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # protected
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get("SECRET_KEY", 'aezakmi')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # protected
@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     # 3rd apps
     'django_extensions',
     'multiselectfield',
+    'celery',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -91,14 +93,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ["POSTGRES_NAME"],
-        'HOST': os.environ["POSTGRES_SERVICE"],
-        'PORT': os.environ["POSTGRES_PORT"],
-        "USER": os.environ["POSTGRES_USER"],
-        "PASSWORD": os.environ["POSTGRES_PASSWORD"],
+        'NAME': os.environ.get("POSTGRES_NAME"),
+        'HOST': os.environ.get("POSTGRES_SERVICE"),
+        'PORT': os.environ.get("POSTGRES_PORT"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -139,6 +140,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'userdata.Account'
+
+ADMIN_URL = 'admin'
 
 FOUNDER_IDEAS_LIMIT = 2
 FINDER_IDEAS_LIMIT  = 3

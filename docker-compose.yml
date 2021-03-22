@@ -1,4 +1,5 @@
-version: "3"
+version: '3'
+
 services:
 
  db:
@@ -7,9 +8,9 @@ services:
   container_name: ins_postgres
   env_file:
    - .env
-
+   
  ins_back:
-  build: ./code
+  build: .
   container_name: ins_back
   restart: unless-stopped
   ports:
@@ -20,8 +21,36 @@ services:
    - ./code:/code
   depends_on:
    - db
+   - redis
   links:
    - db:db
   entrypoint: "bash /code/docker-entrypoint.sh"
   command: "runserver 0.0.0.0:8080"
-
+ 
+ redis:
+  image: redis:latest
+  container_name: ins_redis
+  restart: unless-stopped
+   
+ celery:
+  build: .
+  container_name: ins_celery
+  command: "celery -A config worker -l debug"
+  env_file:
+   - .env
+  depends_on:
+   - db
+   - redis
+  volumes:
+   - ./code:/code
+   
+ celery-beat:
+  build: .
+  container_name: ins_beat
+  command: "celery -A config worker --beat -l debug"
+  depends_on:
+    - db
+    - redis
+    - celery
+  volumes:
+    - ./code:/code

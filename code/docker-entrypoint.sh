@@ -30,7 +30,6 @@ coverage run --source='.' manage.py test --noinput
 coverage html
 coverage report
 
-
 echo '--------------------------'
 echo 'Fixing ownership of files'
 echo '--------------------------'
