@@ -89,3 +89,13 @@ This is probably not a good idea. Taking into account the url mechanism for a gi
 The user is responsible only for himself, while the idea may consist of a group of various people, whose experience may differ as well. Hence the founder can choose what range of experience he expects in people who would like to join his idea.
 - #### Why description is required for Idea model?  
 I assume that if someone came up with an idea and is looking for people willing to join it, one should take care of its description, which will explain his point of view and attract interested people. The title of the idea itself is not very encouraging to participate and doesn't really prove that the idea is innovative, does it?
+- #### Why creating Ideas is limited per user?
+Quality over quantity. And to prevent from uncontrolled amount of creating Ideas that are unlikely to be groundbreaking every time.
+- #### Why Redis?
+Redis can function both as broker, database and cache. It's very light and fas, hence grabbed my attention. But I do not rule out changing to RabbitMQ in the future due to its large task handling and SSL configuration.
+- #### How do you want to use Celery?
+Celery is a great tool for handling background tasks. Its use will surely be found in sending activation links for newly created accounts. There is also a lot of potential to use it to support the Idea invitation system.
+- #### What are you using signals for?
+Not everything can be done by overriding the save method, and it's not always a viable choice. I use signals for example to conveniently set up Founder and Finder models for each created account.
+- #### How do you make sure your code is covered by tests?
+I use cool feature named coverage for this, which reports for me every time the docker is up. I try to keep the whole project in around 90% coverage. Not every code line is needed for coverage.
