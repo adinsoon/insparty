@@ -25,9 +25,7 @@ python manage.py migrate || exit 1
 echo '--------------------------'
 echo 'Run test + coverage'
 echo '--------------------------'
-# python manage.py test --noinput
 coverage run --source='.' manage.py test --noinput
-coverage html
 coverage report
 
 echo '--------------------------'
