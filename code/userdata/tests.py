@@ -136,8 +136,7 @@ class AccountTests(TestCase):
         """
         account = setup_account()
         now = datetime.datetime.today()
-        y, m, d = [faker.random_digit_not_null() for _ in range(3)]
-        future = datetime.date(now.year+y, now.month+m, now.day+d)
+        future = now + datetime.timedelta(days=1)
         account.birthdate = future
         self.assertRaises(ValidationError, account.full_clean)
 
