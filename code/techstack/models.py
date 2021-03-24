@@ -10,7 +10,7 @@ class Tech(models.Model):
     Subclassed by Technology and Specialization models.
     """
     name = models.CharField(_('Name'), max_length=50, unique=True,
-                            help_text="Name",
+                            help_text=_("Name"),
                             error_messages={'unique': _(name_error_text), })
 
     class Meta:

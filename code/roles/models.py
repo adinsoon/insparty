@@ -14,7 +14,7 @@ even if a couple of fields are repeated between them.
 
 class Founder(models.Model):
     account = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=_('account'),
-                                   on_delete=models.CASCADE, related_name=_('founder'))
+                                   on_delete=models.CASCADE, related_name='founder')
 
     class Meta:
         verbose_name        = _('founder')
@@ -26,7 +26,7 @@ class Founder(models.Model):
 
 class Finder(models.Model):
     account = models.OneToOneField(settings.AUTH_USER_MODEL, verbose_name=_('account'),
-                                   on_delete=models.CASCADE, related_name=_('finder'))
+                                   on_delete=models.CASCADE, related_name='finder')
 
     class Meta:
         verbose_name        = _('finder')

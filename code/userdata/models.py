@@ -104,11 +104,11 @@ class Account(AbstractBaseUser, PermissionsMixin):
     experience      = models.CharField(_('Stage of advancement'), max_length=4, choices=Experience.choices,
                                     blank=True, help_text=_(experience_help_text))
     technologies    = models.ManyToManyField(Technology, verbose_name=_('Technologies'), blank=True,
-                                          help_text=_(technology_help_text), related_name=_('accounts'))
+                                          help_text=_(technology_help_text), related_name='accounts')
     frameworks      = models.ManyToManyField(Framework,  verbose_name=_('Frameworks'),   blank=True,
-                                          help_text=_(framework_help_text), related_name=_('accounts'))
+                                          help_text=_(framework_help_text), related_name='accounts')
     specializations = models.ManyToManyField(Specialization, verbose_name=_('Specializations'), blank=True,
-                                          help_text=_(specialize_help_text),  related_name=_('accounts'))
+                                          help_text=_(specialize_help_text),  related_name='accounts')
     sex             = models.CharField(_('Sex'), max_length=4, choices=Sex.choices, blank=True)
     birthdate       = models.DateField(_('Date of birth'), blank=True, null=True,
                                     help_text=_(birthdate_help_text),

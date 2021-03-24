@@ -49,19 +49,19 @@ class Idea(models.Model):
     title_slug      = AutoSlugField(populate_from='title', db_index=True, unique=True,
                                slugify_function=custom_slugify)
     founder         = models.ForeignKey(Founder, verbose_name=_('Idea founder'),
-                                   on_delete=models.CASCADE, related_name=_('ideas'),
+                                   on_delete=models.CASCADE, related_name='ideas',
                                    validators=[validate_founder])
     finders         = models.ManyToManyField(Finder, verbose_name=_('Idea finders'),
-                                        related_name=_('ideas'), help_text=_(finders_help_text),
+                                        related_name='ideas', help_text=_(finders_help_text),
                                         blank=True)
     technologies    = models.ManyToManyField(Technology, verbose_name=_('Technologies'),
-                                        related_name=_('ideas'), help_text=_(technology_help_text),
+                                        related_name='ideas', help_text=_(technology_help_text),
                                         blank=True)
     frameworks      = models.ManyToManyField(Framework, verbose_name=_('Frameworks'),
-                                        related_name=_('ideas'), help_text=_(framework_help_text),
+                                        related_name='ideas', help_text=_(framework_help_text),
                                         blank=True)
     specializations = models.ManyToManyField(Specialization, verbose_name=_('Specializations'),
-                                        related_name=_('ideas'), help_text=_(specialize_help_text),
+                                        related_name='ideas', help_text=_(specialize_help_text),
                                         blank=True)
     advancement     = MultiSelectField(_('Advancement of idea'), choices=Experience.choices, max_length=9,
                                     blank=True, help_text=_(advancement_help_text))
