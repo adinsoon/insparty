@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'multiselectfield',
     'celery',
     'django_celery_beat',
+    'rest_framework',
 
     # utils and experiments
     'utils',
@@ -97,6 +98,13 @@ EMAIL_PORT = os.environ.get("EMAIL_PORT")
 EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
 DEFAULT_FROM_EMAIL = "Contact Insparty"
 
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
