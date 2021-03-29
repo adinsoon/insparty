@@ -37,7 +37,7 @@ def validate_founder(pk):
     limit = settings.FOUNDER_IDEAS_LIMIT
     error_text = f"You can have up to {limit} open ideas as a founder. " \
                  f"Close any of the created ideas or suspend them and try again."
-    if Founder.objects.get(pk=pk).ideas.filter(status=Status.OPEN).count() > limit:
+    if Founder.objects.get(pk=pk).ideas.filter(status=Status.OPEN).count() >= limit:
         raise ValidationError(_(error_text))
     else:
         return
@@ -97,3 +97,8 @@ class Idea(models.Model):
         now = timezone.now()
         interval = datetime.timedelta(days=7)
         return now - interval <= self.date_joined <= now
+
+    def save(self, *args, **kwargs):
+        validate_founder(self.founder.pk)
+
+        super(Idea, self).save(*args, **kwargs)
